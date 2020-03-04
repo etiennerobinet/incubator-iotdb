@@ -127,7 +127,7 @@ public class IoTDBConnection implements Connection {
 
   @Override
   public void commit() throws SQLException {
-    throw new SQLException("Not support commit");
+
   }
 
   @Override

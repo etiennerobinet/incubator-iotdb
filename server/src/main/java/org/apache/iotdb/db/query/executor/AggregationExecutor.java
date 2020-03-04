@@ -172,14 +172,16 @@ public class AggregationExecutor {
             }
           }
           seriesReader.skipCurrentPage();
-        } else {
-          // cal by page data
-          BatchData batchData = seriesReader.nextPage();
+          continue;
+        }
+        // cal by page data
+        while (seriesReader.hasNextOverlappedPage()) {
+          BatchData nextOverlappedPageData = seriesReader.nextOverlappedPage();
           for (int i = 0; i < aggregateResultList.size(); i++) {
             if (Boolean.FALSE.equals(isCalculatedList.get(i))) {
               AggregateResult aggregateResult = aggregateResultList.get(i);
-              aggregateResult.updateResultFromPageData(batchData);
-              batchData.resetBatchData();
+              aggregateResult.updateResultFromPageData(nextOverlappedPageData);
+              nextOverlappedPageData.resetBatchData();
               if (aggregateResult.isCalculatedAggregationResult()) {
                 isCalculatedList.set(i, true);
                 remainingToCalculate--;

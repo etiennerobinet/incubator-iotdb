@@ -24,6 +24,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
+    <modules>
+        <module>iotdb-features</module>
+        <module>iotdb-features/untitled</module>
+        <module>camel-iotdb</module>
+        <module>camel-iotdb</module>
+        <module>camel-iotdb</module>
+        <module>camel-iotdb</module>
+        <module>camel-features-iotdb</module>
+    </modules>
 
     <parent>
         <groupId>org.apache</groupId>

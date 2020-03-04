@@ -485,7 +485,6 @@ public class IoTDBConfig {
 
   private boolean enableMetricsWebService = true;
 
-  private int queryCacheSizeInMetric = 200;
 
   public IoTDBConfig() {
     // empty constructor
@@ -1364,13 +1363,5 @@ public class IoTDBConfig {
 
   public void setEnableMetricsWebService(boolean enableMetricsWebService) {
     this.enableMetricsWebService = enableMetricsWebService;
-  }
-
-  public int getQueryCacheSizeInMetric() {
-    return queryCacheSizeInMetric;
-  }
-
-  public void setQueryCacheSizeInMetric(int queryCacheSizeInMetric) {
-    this.queryCacheSizeInMetric = queryCacheSizeInMetric;
   }
 }

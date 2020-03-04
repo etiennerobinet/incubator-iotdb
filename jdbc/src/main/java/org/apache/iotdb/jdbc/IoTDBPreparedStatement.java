@@ -41,11 +41,8 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 import org.apache.iotdb.service.rpc.thrift.TSIService.Iface;
 
 public class IoTDBPreparedStatement extends IoTDBStatement implements PreparedStatement {
@@ -56,7 +53,7 @@ public class IoTDBPreparedStatement extends IoTDBStatement implements PreparedSt
   /**
    * save the SQL parameters as (paramLoc,paramValue) pairs.
    */
-  private final Map<Integer, String> parameters = new HashMap<>();
+  private final Map<Integer, String> parameters = new LinkedHashMap<>();
 
   IoTDBPreparedStatement(IoTDBConnection connection, Iface client,
       Long sessionId, String sql,

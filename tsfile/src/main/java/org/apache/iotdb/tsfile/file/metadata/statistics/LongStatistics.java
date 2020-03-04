@@ -217,7 +217,7 @@ public class LongStatistics extends Statistics<Long> {
 
   @Override
   public String toString() {
-    return super.toString() + " [minValue:" + minValue + ",maxValue:" + maxValue + ",firstValue:" + firstValue +
+    return "[minValue:" + minValue + ",maxValue:" + maxValue + ",firstValue:" + firstValue +
         ",lastValue:" + lastValue + ",sumValue:" + sumValue + "]";
   }
 }

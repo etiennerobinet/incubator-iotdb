@@ -93,7 +93,6 @@ selectElements
     : functionCall (COMMA functionCall)* #functionElement
     | suffixPath (COMMA suffixPath)* #selectElement
     | STRING_LITERAL (COMMA STRING_LITERAL)* #selectConstElement
-    | lastClause #lastElement
     ;
 
 functionCall
@@ -110,10 +109,6 @@ functionName
     | FIRST_VALUE
     | SUM
     | LAST_VALUE
-    ;
-
-lastClause
-    : LAST suffixPath (COMMA suffixPath)*
     ;
 
 attributeClauses
@@ -154,7 +149,6 @@ specialClause
     : specialLimit
     | groupByClause specialLimit?
     | fillClause slimitClause? alignByDeviceClauseOrDisableAlign?
-    | alignByDeviceClauseOrDisableAlign?
     ;
 
 specialLimit
@@ -264,7 +258,6 @@ timeInterval
 
 timeValue
     : dateFormat
-    | dateExpression
     | INT
     ;
 
@@ -726,10 +719,6 @@ LAST_VALUE
     : L A S T UNDERLINE V A L U E
     ;
 
-LAST
-    : L A S T
-    ;
-
 DISABLE
     : D I S A B L E
     ;
@@ -818,9 +807,9 @@ DURATION
 
 DATETIME
     : INT ('-'|'/') INT ('-'|'/') INT
-      ((T | WS)
+      (T | WS)
       INT ':' INT ':' INT (DOT INT)?
-      (('+' | '-') INT ':' INT)?)?
+      (('+' | '-') INT ':' INT)?
     ;
 /** Allow unicode rule/token names */
 ID : NameChar NameChar*;

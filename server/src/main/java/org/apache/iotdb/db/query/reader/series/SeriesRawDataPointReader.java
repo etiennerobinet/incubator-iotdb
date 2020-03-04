@@ -24,28 +24,30 @@ import org.apache.iotdb.tsfile.read.reader.IPointReader;
 
 import java.io.IOException;
 
-/**
- * only for test now
- */
 public class SeriesRawDataPointReader implements IPointReader {
 
-  private final SeriesRawDataBatchReader batchReader;
+  private final SeriesReader seriesReader;
 
   private boolean hasCachedTimeValuePair;
   private BatchData batchData;
   private TimeValuePair timeValuePair;
 
   public SeriesRawDataPointReader(SeriesReader seriesReader) {
-    this.batchReader = new SeriesRawDataBatchReader(seriesReader);
+    this.seriesReader = seriesReader;
   }
 
-
-  @Override
-  public boolean hasNextTimeValuePair() throws IOException {
-    if (hasCachedTimeValuePair) {
-      return true;
+  private boolean hasNext() throws IOException {
+    while (seriesReader.hasNextChunk()) {
+      while (seriesReader.hasNextPage()) {
+        if (seriesReader.hasNextOverlappedPage()) {
+          return true;
+        }
+      }
     }
+    return false;
+  }
 
+  private boolean hasNextSatisfiedInCurrentBatch() {
     if (batchData != null && batchData.hasCurrent()) {
       timeValuePair = new TimeValuePair(batchData.currentTime(),
           batchData.currentTsPrimitiveType());
@@ -53,18 +55,26 @@ public class SeriesRawDataPointReader implements IPointReader {
       batchData.next();
       return true;
     }
+    return false;
+  }
 
-    while (batchReader.hasNextBatch()) {
-      batchData = batchReader.nextBatch();
-      if (batchData.hasCurrent()) {
-        timeValuePair = new TimeValuePair(batchData.currentTime(),
-            batchData.currentTsPrimitiveType());
-        hasCachedTimeValuePair = true;
-        batchData.next();
+  @Override
+  public boolean hasNextTimeValuePair() throws IOException {
+    if (hasCachedTimeValuePair) {
+      return true;
+    }
+
+    if (hasNextSatisfiedInCurrentBatch()) {
+      return true;
+    }
+
+    // has not cached timeValuePair
+    while (hasNext()) {
+      batchData = seriesReader.nextOverlappedPage();
+      if (hasNextSatisfiedInCurrentBatch()) {
         return true;
       }
     }
-
     return false;
   }
 

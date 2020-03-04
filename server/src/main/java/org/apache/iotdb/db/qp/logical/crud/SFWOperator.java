@@ -32,7 +32,6 @@ public abstract class SFWOperator extends RootOperator {
   private FromOperator fromOperator;
   private FilterOperator filterOperator;
   private boolean hasAggregation = false;
-  private boolean lastQuery = false;
 
   public SFWOperator(int tokenIntType) {
     super(tokenIntType);
@@ -59,9 +58,6 @@ public abstract class SFWOperator extends RootOperator {
     if (!sel.getAggregations().isEmpty()) {
       hasAggregation = true;
     }
-    if (sel.isLastQuery()) {
-      lastQuery = true;
-    }
   }
 
   public FilterOperator getFilterOperator() {
@@ -87,9 +83,5 @@ public abstract class SFWOperator extends RootOperator {
 
   public boolean hasAggregation() {
     return hasAggregation;
-  }
-
-  public boolean isLastQuery() {
-    return lastQuery;
   }
 }

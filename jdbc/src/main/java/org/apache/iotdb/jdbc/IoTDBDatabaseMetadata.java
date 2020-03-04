@@ -35,6 +35,7 @@ public class IoTDBDatabaseMetadata implements DatabaseMetaData {
   private static final Logger logger = LoggerFactory
           .getLogger(IoTDBDatabaseMetadata.class);
   private static final String METHOD_NOT_SUPPORTED_STRING = "Method not supported";
+  private static final String VERSION="0.10.0-SNAPSHOT";
   private long sessionId;
 
   IoTDBDatabaseMetadata(IoTDBConnection connection, TSIService.Iface client, long sessionId) {
@@ -171,7 +172,7 @@ public class IoTDBDatabaseMetadata implements DatabaseMetaData {
 
   @Override
   public String getDatabaseProductVersion() throws SQLException {
-    throw new SQLException(METHOD_NOT_SUPPORTED_STRING);
+      return VERSION;
   }
 
   @Override
@@ -191,12 +192,12 @@ public class IoTDBDatabaseMetadata implements DatabaseMetaData {
 
   @Override
   public String getDriverName() throws SQLException {
-    throw new SQLException(METHOD_NOT_SUPPORTED_STRING);
+    return org.apache.iotdb.jdbc.IoTDBDriver.class.getName();
   }
 
   @Override
   public String getDriverVersion() throws SQLException {
-    throw new SQLException(METHOD_NOT_SUPPORTED_STRING);
+    return VERSION;
   }
 
   @Override
@@ -483,13 +484,12 @@ public class IoTDBDatabaseMetadata implements DatabaseMetaData {
 
   @Override
   public String getURL() {
-    // TODO: Return the URL for this DBMS or null if it cannot be generated
     return null;
   }
 
   @Override
   public String getUserName() throws SQLException {
-    throw new SQLException(METHOD_NOT_SUPPORTED_STRING);
+    return client.toString();
   }
 
   @Override

@@ -65,7 +65,6 @@ import org.apache.iotdb.db.qp.physical.crud.GroupByPlan;
 import org.apache.iotdb.db.qp.physical.crud.InsertPlan;
 import org.apache.iotdb.db.qp.physical.crud.QueryPlan;
 import org.apache.iotdb.db.qp.physical.crud.RawDataQueryPlan;
-import org.apache.iotdb.db.qp.physical.crud.LastQueryPlan;
 import org.apache.iotdb.db.qp.physical.sys.AuthorPlan;
 import org.apache.iotdb.db.qp.physical.sys.CountPlan;
 import org.apache.iotdb.db.qp.physical.sys.CreateTimeSeriesPlan;
@@ -237,17 +236,10 @@ public class PhysicalGenerator {
       queryPlan = new AggregationPlan();
       ((AggregationPlan) queryPlan)
           .setAggregations(queryOperator.getSelectOperator().getAggregations());
-    } else if (queryOperator.isLastQuery()) {
-      queryPlan = new LastQueryPlan();
     } else {
       queryPlan = new RawDataQueryPlan();
     }
-    if (queryPlan instanceof LastQueryPlan) {
-      // Last query result set will not be affected by alignment
-      queryPlan.setAlignByTime(true);
-      List<Path> paths = queryOperator.getSelectedPaths();
-      queryPlan.setPaths(paths);
-    } else if (queryOperator.isAlignByDevice()) {
+    if (queryOperator.isAlignByDevice()) {
       // below is the core realization of ALIGN_BY_DEVICE sql logic
       AlignByDevicePlan alignByDevicePlan = new AlignByDevicePlan();
       if (queryPlan instanceof GroupByPlan) {

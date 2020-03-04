@@ -26,7 +26,9 @@ import org.apache.iotdb.tsfile.file.metadata.statistics.Statistics;
 import org.apache.iotdb.tsfile.read.common.BatchData;
 import org.apache.iotdb.tsfile.read.common.Path;
 import org.apache.iotdb.tsfile.read.filter.TimeFilter;
+
 import java.io.IOException;
+
 
 public class SeriesReaderByTimestamp implements IReaderByTimestamp {
 
@@ -61,44 +63,24 @@ public class SeriesReaderByTimestamp implements IReaderByTimestamp {
   }
 
   private boolean hasNext(long timestamp) throws IOException {
-
-    /*
-     * consume pages firstly
-     */
-    if (readPageData(timestamp)) {
-      return true;
-    }
-
-    /*
-     * consume chunk secondly
-     */
     while (seriesReader.hasNextChunk()) {
-      Statistics statistics = seriesReader.currentChunkStatistics();
-      if (!satisfyTimeFilter(statistics)) {
+      if (!satisfyTimeFilter(seriesReader.currentChunkStatistics())) {
         seriesReader.skipCurrentChunk();
         continue;
       }
-      if (readPageData(timestamp)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  private boolean readPageData(long timestamp) throws IOException {
-    while (seriesReader.hasNextPage()) {
-      if (!seriesReader.isPageOverlapped()) {
+      while (seriesReader.hasNextPage()) {
         if (!satisfyTimeFilter(seriesReader.currentPageStatistics())) {
           seriesReader.skipCurrentPage();
           continue;
         }
-      }
-      batchData = seriesReader.nextPage();
-      if (isEmpty(batchData)) {
-        continue;
-      }
-      if (batchData.getTimeByIndex(batchData.length() - 1) >= timestamp) {
-        return true;
+        if (!seriesReader.isPageOverlapped()) {
+          batchData = seriesReader.nextPage();
+        } else {
+          batchData = seriesReader.nextOverlappedPage();
+        }
+        if (batchData.getTimeByIndex(batchData.length() - 1) >= timestamp) {
+          return true;
+        }
       }
     }
     return false;
@@ -108,7 +90,4 @@ public class SeriesReaderByTimestamp implements IReaderByTimestamp {
     return seriesReader.getTimeFilter().satisfy(statistics);
   }
 
-  private boolean isEmpty(BatchData batchData) {
-    return batchData == null || !batchData.hasCurrent();
-  }
 }

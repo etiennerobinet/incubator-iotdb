@@ -80,7 +80,6 @@ import org.apache.iotdb.db.qp.physical.crud.GroupByPlan;
 import org.apache.iotdb.db.qp.physical.crud.InsertPlan;
 import org.apache.iotdb.db.qp.physical.crud.QueryPlan;
 import org.apache.iotdb.db.qp.physical.crud.RawDataQueryPlan;
-import org.apache.iotdb.db.qp.physical.crud.LastQueryPlan;
 import org.apache.iotdb.db.qp.physical.crud.UpdatePlan;
 import org.apache.iotdb.db.qp.physical.sys.AuthorPlan;
 import org.apache.iotdb.db.qp.physical.sys.CountPlan;
@@ -242,8 +241,6 @@ public class PlanExecutor implements IPlanExecutor {
       } else if (queryPlan instanceof FillQueryPlan) {
         FillQueryPlan fillQueryPlan = (FillQueryPlan) queryPlan;
         queryDataSet = queryRouter.fill(fillQueryPlan, context);
-      } else if (queryPlan instanceof LastQueryPlan) {
-        queryDataSet = queryRouter.lastQuery((LastQueryPlan) queryPlan, context);
       } else {
         queryDataSet = queryRouter.rawDataQuery((RawDataQueryPlan) queryPlan, context);
       }
@@ -804,7 +801,8 @@ public class PlanExecutor implements IPlanExecutor {
         }
       }
       return storageEngine.insertBatch(batchInsertPlan);
-    } catch (PathException | StorageEngineException | MetadataException e) {
+
+    } catch (StorageEngineException | MetadataException e) {
       throw new QueryProcessException(e);
     }
   }

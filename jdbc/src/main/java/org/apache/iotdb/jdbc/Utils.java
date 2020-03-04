@@ -40,13 +40,10 @@ public class Utils {
       return params;
     }
     boolean isUrlLegal = false;
-    Matcher matcher = null;
-    if (url.startsWith(Config.IOTDB_URL_PREFIX)) {
-      String subURL = url.substring(Config.IOTDB_URL_PREFIX.length());
-      matcher = URL_PATTERN.matcher(subURL);
-      if (matcher.matches()) {
-        isUrlLegal = true;
-      }
+    String subURL = url.substring(Config.IOTDB_URL_PREFIX.length());
+    Matcher matcher = URL_PATTERN.matcher(subURL);
+    if(matcher.matches()) {
+      isUrlLegal = true;
     }
     if (!isUrlLegal) {
       throw new IoTDBURLException("Error url format, url should be jdbc:iotdb://anything:port/ or jdbc:iotdb://anything:port");

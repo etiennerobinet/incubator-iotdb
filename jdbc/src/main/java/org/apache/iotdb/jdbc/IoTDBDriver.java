@@ -28,8 +28,10 @@ import java.util.Properties;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import org.apache.thrift.transport.TTransportException;
+import org.osgi.service.component.annotations.Component;
 
-public class IoTDBDriver implements Driver {
+@Component(service = java.sql.Driver.class, immediate = true)
+public class IoTDBDriver implements Driver{
 
   private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory
       .getLogger(IoTDBDriver.class);
