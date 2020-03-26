@@ -18,13 +18,13 @@ Licensed to the Apache Software Foundation (ASF) under one
  */
 package org.apache.iotdb.camel;
 
-import main.java.org.apache.iotdb.camel.IoTDBConsumer;
+import org.apache.camel.support.DefaultEndpoint;
+import org.apache.iotdb.camel.IoTDBConsumer;
 import org.apache.camel.Component;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.camel.api.management.ManagedAttribute;
-import org.apache.camel.impl.DefaultEndpoint;
 import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriParam;
@@ -38,19 +38,19 @@ import java.util.regex.Pattern;
 
 @UriEndpoint(scheme = "iotdb", title = "IoTDB", syntax = "iotdb:url", label = "iotdb")
 public class IoTDBEndpoint extends DefaultEndpoint {
-    @UriPath @Metadata(required = "true")
+    @UriPath @Metadata(required = true)
     private String url;
 
-    @UriParam @Metadata(required = "false")
+    @UriParam @Metadata(required =false)
     private  String sql;
 
     @UriParam
-    @Metadata(required = "false")
+    @Metadata(required = false)
     @SuppressWarnings("unused")
     private String username;
 
     @UriParam
-    @Metadata(required = "false")
+    @Metadata(required = false)
     @SuppressWarnings("unused")
     private String password;
 

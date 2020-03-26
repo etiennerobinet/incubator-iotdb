@@ -19,7 +19,7 @@ Licensed to the Apache Software Foundation (ASF) under one
 package org.apache.iotdb.camel;
 
 import org.apache.camel.Exchange;
-import org.apache.camel.impl.DefaultProducer;
+import org.apache.camel.support.DefaultProducer;
 import org.apache.iotdb.session.IoTDBSessionException;
 import org.apache.iotdb.session.Session;
 
